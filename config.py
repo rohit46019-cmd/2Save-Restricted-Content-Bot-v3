@@ -23,7 +23,7 @@ YTUB_COOKIES = """
 API_ID       = os.getenv("API_ID", "28803298")
 API_HASH     = os.getenv("API_HASH", "d8ea0f3e56c55b8ef9c0e8cb39b9c857")
 BOT_TOKEN    = os.getenv("BOT_TOKEN", "8586154945:AAHnMi7n42kE5ENkZdqHMr0YDC_6kkssBdM")
-MONGO_DB     = os.getenv("MONGO_DB", "mongodb+srv://rohit37819_db_user:P7E2iD0dqVhCwrI0@cluster0.1e9ikck.mongodb.net/?appName=Cluster0")
+MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://rohit37819_db_user:P7E2iD0dqVhCwrI0@cluster0.1e9ikck.mongodb.net/?appName=Cluster0")
 DB_NAME      = os.getenv("DB_NAME", "telegram_downloader")
 
 # ─── OWNER / CONTROL SETTINGS ───────────────────────────────────────────────────
@@ -76,3 +76,4 @@ P0 = {
 # ════════════════════════════════════════════════════════════════════════════════
 # ░ DEVGAGAN
 # ════════════════════════════════════════════════════════════════════════════════
+
