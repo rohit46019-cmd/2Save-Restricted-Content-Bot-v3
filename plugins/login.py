@@ -24,6 +24,26 @@ login_cache = {}
 
 @bot.on_message(filters.command('login'))
 async def login_command(client, message):
+    @bot.on_message(filters.command('login'))
+async def login_command(client, message):
+    user_id = message.from_user.id
+    
+    # 🔥 NEW CODE: Check if user already logged in
+    session_data = await get_user_data(user_id)
+    if session_data and 'session_string' in session_data:
+        return await message.reply("✅ You are already logged in!")
+
+    # original login flow starts here
+    set_user_step(user_id, STEP_PHONE)
+    login_cache.pop(user_id, None)
+    await message.delete()
+
+    status_msg = await message.reply(
+        """Please send your phone number with country code
+Example: `+12345678900`"""
+    )
+    login_cache[user_id] = {'status_msg': status_msg}
+
     user_id = message.from_user.id
     set_user_step(user_id, STEP_PHONE)
     login_cache.pop(user_id, None)
@@ -283,3 +303,4 @@ Still removing from database..."""
                 os.remove(f"{user_id}_client.session")
         except Exception:
             pass
+
