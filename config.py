@@ -30,7 +30,7 @@ DB_NAME      = os.getenv("DB_NAME", "telegram_downloader")
 OWNER_ID     = list(map(int, os.getenv("OWNER_ID", "6065778458").split()))  # space-separated list
 STRING       = os.getenv("STRING", None)  # optional session string
 LOG_GROUP    = int(os.getenv("LOG_GROUP", "-3452205668"))
-FORCE_SUB    = int(os.getenv("FORCE_SUB", "--1001891964576"))
+FORCE_SUB    = int(os.getenv("FORCE_SUB", "-1001891964576"))
 
 # ─── SECURITY KEYS ──────────────────────────────────────────────────────────────
 MASTER_KEY   = os.getenv("MASTER_KEY", "gK8HzLfT9QpViJcYeB5wRa3DmN7P2xUq")  # session encryption
