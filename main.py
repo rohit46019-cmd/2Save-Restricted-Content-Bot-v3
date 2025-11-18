@@ -7,6 +7,18 @@ from shared_client import start_client
 import importlib
 import os
 import sys
+import os
+
+# AUTO DELETE OLD SESSION (Fix ImportBotAuthorizationRequest)
+try:
+    if os.path.exists("telethonbot.session"):
+        os.remove("telethonbot.session")
+        print("Deleted old telethonbot.session")
+    if os.path.exists("telethonbot.session-journal"):
+        os.remove("telethonbot.session-journal")
+        print("Deleted old telethonbot.session-journal")
+except Exception as e:
+    print("Session delete error:", e)
 
 async def load_and_run_plugins():
     await start_client()
@@ -39,3 +51,4 @@ if __name__ == "__main__":
             loop.close()
         except Exception:
             pass
+
