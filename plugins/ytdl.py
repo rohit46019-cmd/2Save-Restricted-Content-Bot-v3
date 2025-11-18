@@ -359,10 +359,10 @@ async def process_video(client, event, url, cookies_env_var, check_duration_and_
         W = k['width']
         H = k['height']
         D = k['duration']
-        metadata['width'] = info_dict.get('width') or W
-        metadata['height'] = info_dict.get('height') or H
-        metadata['duration'] = int(info_dict.get('duration') or 0) or D
-        thumbnail_url = info_dict.get('thumbnail', None)
+        metadata['width'] = int(info_dict.get('width') or W or 0)
+metadata['height'] = int(info_dict.get('height') or H or 0)
+metadata['duration'] = int(info_dict.get('duration') or D or 0)
+
         THUMB = None
  
          
@@ -393,7 +393,16 @@ async def process_video(client, event, url, cookies_env_var, check_duration_and_
                 client, download_path,
                 reply=prog,
                 progress_bar_function=lambda done, total: progress_callback(done, total, chat_id)
-            )
+            ) 
+         ext = os.path.splitext(download_path)[1].lower()
+video_ext = ['.mp4', '.mkv', '.webm', '.mov', '.avi']
+audio_ext = ['.mp3', '.m4a', '.aac', '.wav']
+doc_ext = ['.pdf', '.txt', '.zip', '.rar', '.html', '.json']
+
+is_video = ext in video_ext
+is_audio = ext in audio_ext
+is_doc = ext in doc_ext
+
             await client.send_file(
                 event.chat_id,
                 uploaded,
@@ -567,3 +576,4 @@ def convert(seconds: int) -> str:
     hours, remainder = divmod(seconds, 3600)
     minutes, seconds = divmod(remainder, 60)
     return f"{hours}:{minutes:02d}:{seconds:02d}"
+
