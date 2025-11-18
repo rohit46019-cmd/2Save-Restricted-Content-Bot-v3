@@ -7,8 +7,6 @@ from shared_client import start_client
 import importlib
 import os
 import sys
-import os
-
 # AUTO DELETE OLD SESSION (Fix ImportBotAuthorizationRequest)
 try:
     if os.path.exists("telethonbot.session"):
@@ -51,4 +49,5 @@ if __name__ == "__main__":
             loop.close()
         except Exception:
             pass
+
 
