@@ -1,7 +1,7 @@
 # Copyright (c) 2025 devgagan : https://github.com/devgaganin.  
 # Licensed under the GNU General Public License v3.0.  
 # See LICENSE file in the repository root for full license text.
-
+  import mimetypes
 import os, re, time, asyncio, json, asyncio 
 from pyrogram import Client, filters
 from pyrogram.types import Message
@@ -337,11 +337,62 @@ async def process_msg(c, u, m, d, lt, uid, i):
             await c.edit_message_text(d, p.id, 'Uploading...')
             st = time.time()
 
-            try:
-                video_extensions = ['.mp4', '.avi', '.mkv', '.mov', '.wmv', '.flv', '.webm', '.m4v', '.3gp', '.ogv']
-                audio_extensions = ['.mp3', '.wav', '.flac', '.aac', '.ogg', '.wma', '.m4a', '.opus', '.aiff', '.ac3']
-                file_ext = os.path.splitext(f)[1].lower()
-                if m.video or (m.document and file_ext in video_extensions):
+          
+
+mime, _ = mimetypes.guess_type(f)
+
+is_video = mime and mime.startswith("video")
+is_audio = mime and mime.startswith("audio")
+is_image = mime and mime.startswith("image")
+
+# ---- Video ----
+if is_video or m.video:
+    mtd = await get_video_metadata(f)
+    dur, h, w = mtd['duration'], mtd['width'], mtd['height']
+    th = await screenshot(f, dur, d)
+    await c.send_video(
+        tcid,
+        video=f,
+        caption=ft if m.caption else None,
+        thumb=th,
+        width=w,
+        height=h,
+        duration=dur,
+        reply_to_message_id=rtmid,
+        progress=prog, progress_args=(c, d, p.id, st)
+    )
+
+# ---- Audio ----
+elif is_audio or m.audio:
+    await c.send_audio(
+        tcid,
+        audio=f,
+        caption=ft if m.caption else None,
+        thumb=th,
+        reply_to_message_id=rtmid,
+        progress=prog, progress_args=(c, d, p.id, st)
+    )
+
+# ---- Image ----
+elif is_image or m.photo:
+    await c.send_photo(
+        tcid,
+        photo=f,
+        caption=ft if m.caption else None,
+        reply_to_message_id=rtmid,
+        progress=prog, progress_args=(c, d, p.id, st)
+    )
+
+# ---- DEFAULT for ALL OTHER FILES ----
+else:
+    await c.send_document(
+        tcid,
+        document=f,
+        caption=ft if m.caption else None,
+        reply_to_message_id=rtmid,
+        progress=prog, progress_args=(c, d, p.id, st)
+    )
+
                     mtd = await get_video_metadata(f)
                     dur, h, w = mtd['duration'], mtd['width'], mtd['height']
                     th = await screenshot(f, dur, d)
@@ -556,5 +607,6 @@ async def text_handler(c, m):
         finally:
             await remove_active_batch(uid)
             Z.pop(uid, None)
+
 
 
