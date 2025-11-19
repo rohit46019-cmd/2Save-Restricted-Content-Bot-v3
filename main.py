@@ -8,8 +8,9 @@ import os
 import sys
 
 # Use Render's PERSISTENT WRITABLE DIRECTORY
-SESSION_DIR = "/var/data/sessions"
-os.makedirs(SESSION_DIR, exist_ok=True)
+SESSION_DIR = "/tmp/sessions"
+session_path = f"{SESSION_DIR}/telethonbot.session"
+journal_path = f"{SESSION_DIR}/telethonbot.session-journal"
 
 # AUTO DELETE OLD SESSION (Fix ImportBotAuthorizationRequest)
 try:
@@ -64,3 +65,4 @@ if __name__ == "__main__":
             loop.close()
         except Exception:
             pass
+
