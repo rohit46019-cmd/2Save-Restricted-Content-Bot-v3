@@ -32,10 +32,15 @@ userbot = Client(
 )
 
 async def start_client():
-    if not client.is_connected():
+
+    # ---- Telethon ----
+    try:
         await client.start(bot_token=BOT_TOKEN)
         print("Telethon Bot Started")
+    except Exception as e:
+        print("Telethon start error:", e)
 
+    # ---- Userbot ----
     if STRING:
         try:
             await userbot.start()
@@ -44,7 +49,17 @@ async def start_client():
             print("Invalid STRING session:", e)
             sys.exit(1)
 
-    await app.start()
-    print("Pyro Bot Started")
+    # ---- Pyrogram ----
+    try:
+        await app.start()
+        print("Pyro Bot Started")
+    except Exception as e:
+        print("Pyrogram start error:", e)
+
+    # MOST IMPORTANT FIX:
+    # Make these objects importable from plugins
+    globals()["tele_client"] = client
+    globals()["pyro_client"] = app
+    globals()["userbot_client"] = userbot
 
     return client, app, userbot
