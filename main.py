@@ -9,24 +9,12 @@ import sys
 
 # Use Render's PERSISTENT WRITABLE DIRECTORY
 SESSION_DIR = "/tmp/sessions"
+os.makedirs(SESSION_DIR, exist_ok=True)  # Ensure session folder exists
+
 session_path = f"{SESSION_DIR}/telethonbot.session"
 journal_path = f"{SESSION_DIR}/telethonbot.session-journal"
 
-# AUTO DELETE OLD SESSION (Fix ImportBotAuthorizationRequest)
-try:
-    session_path = f"{SESSION_DIR}/telethonbot.session"
-    journal_path = f"{SESSION_DIR}/telethonbot.session-journal"
-
-    if os.path.exists(session_path):
-        os.remove(session_path)
-        print("Deleted old telethonbot.session")
-
-    if os.path.exists(journal_path):
-        os.remove(journal_path)
-        print("Deleted old telethonbot.session-journal")
-
-except Exception as e:
-    print("Session delete error:", e)
+# (Auto delete removed as requested)
 
 
 async def load_and_run_plugins():
@@ -38,10 +26,13 @@ async def load_and_run_plugins():
     ]
 
     for plugin in plugins:
-        module = importlib.import_module(f"plugins.{plugin}")
-        if hasattr(module, f"run_{plugin}_plugin"):
-            print(f"Running {plugin} plugin...")
-            await getattr(module, f"run_{plugin}_plugin")()
+        try:
+            module = importlib.import_module(f"plugins.{plugin}")
+            if hasattr(module, f"run_{plugin}_plugin"):
+                print(f"Running {plugin} plugin...")
+                await getattr(module, f"run_{plugin}_plugin")()
+        except Exception as e:
+            print(f"Error in {plugin}: {e}")
 
 
 async def main():
@@ -65,4 +56,3 @@ if __name__ == "__main__":
             loop.close()
         except Exception:
             pass
-
