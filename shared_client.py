@@ -7,20 +7,28 @@ from pyrogram import Client
 import sys
 import os
 
-# Ensure /tmp folders exist (always writable on any host)
-os.makedirs("/tmp/sessions", exist_ok=True)
+# Render FREE plan: only this directory is writable persistently
+SESSION_DIR = "/var/data/sessions"
+os.makedirs(SESSION_DIR, exist_ok=True)
 
-client = TelegramClient("/tmp/sessions/telethonbot", API_ID, API_HASH)
+# TELETHON SESSION
+client = TelegramClient(
+    f"{SESSION_DIR}/telethonbot",
+    API_ID,
+    API_HASH
+)
 
+# PYROGRAM BOT SESSION
 app = Client(
-    "/tmp/sessions/pyrogrambot",
+    f"{SESSION_DIR}/pyrogrambot",
     api_id=API_ID,
     api_hash=API_HASH,
     bot_token=BOT_TOKEN
 )
 
+# USERBOT SESSION (String Session)
 userbot = Client(
-    "/tmp/sessions/4gbbot",
+    f"{SESSION_DIR}/4gbbot",
     api_id=API_ID,
     api_hash=API_HASH,
     session_string=STRING
@@ -36,7 +44,7 @@ async def start_client():
             await userbot.start()
             print("Userbot started...")
         except Exception as e:
-            print(f"Hey honey!! check your premium string session, it may be invalid or expired: {e}")
+            print(f"Your premium string session may be invalid/expired: {e}")
             sys.exit(1)
 
     await app.start()
