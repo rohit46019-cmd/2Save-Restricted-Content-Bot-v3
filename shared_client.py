@@ -1,14 +1,11 @@
-# Copyright (c) 2025 devgagan : https://github.com/devgaganin.
-# Licensed under the GNU General Public License v3.0.
-
+import os
 from telethon import TelegramClient
 from config import API_ID, API_HASH, BOT_TOKEN, STRING
 from pyrogram import Client
 import sys
-import os
 
-# Render FREE plan: only this directory is writable persistently
-SESSION_DIR = "/var/data/sessions"
+# USE /tmp INSTEAD OF /var/data
+SESSION_DIR = "/tmp/sessions"
 os.makedirs(SESSION_DIR, exist_ok=True)
 
 # TELETHON SESSION
@@ -26,7 +23,7 @@ app = Client(
     bot_token=BOT_TOKEN
 )
 
-# USERBOT SESSION (String Session)
+# USERBOT SESSION (STRING SESSION)
 userbot = Client(
     f"{SESSION_DIR}/4gbbot",
     api_id=API_ID,
@@ -37,16 +34,17 @@ userbot = Client(
 async def start_client():
     if not client.is_connected():
         await client.start(bot_token=BOT_TOKEN)
-        print("SpyLib started...")
+        print("Telethon Bot Started")
 
     if STRING:
         try:
             await userbot.start()
-            print("Userbot started...")
+            print("Userbot Started")
         except Exception as e:
-            print(f"Your premium string session may be invalid/expired: {e}")
+            print("Invalid STRING session:", e)
             sys.exit(1)
 
     await app.start()
-    print("Pyro App Started...")
+    print("Pyro Bot Started")
+
     return client, app, userbot
