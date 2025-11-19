@@ -22,8 +22,6 @@ STEP_CODE = 2
 STEP_PASSWORD = 3
 login_cache = {}
 
-@bot.on_message(filters.command('login'))
-async def login_command(client, message):
     @bot.on_message(filters.command('login'))
 async def login_command(client, message):
     user_id = message.from_user.id
@@ -303,4 +301,5 @@ Still removing from database..."""
                 os.remove(f"{user_id}_client.session")
         except Exception:
             pass
+
 
