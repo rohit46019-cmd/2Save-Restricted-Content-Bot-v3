@@ -7,11 +7,14 @@ import importlib
 import os
 import sys
 
+# Use Render's PERSISTENT WRITABLE DIRECTORY
+SESSION_DIR = "/var/data/sessions"
+os.makedirs(SESSION_DIR, exist_ok=True)
+
 # AUTO DELETE OLD SESSION (Fix ImportBotAuthorizationRequest)
 try:
-    # NEW PATH — matches shared_client.py
-    session_path = "/tmp/sessions/telethonbot.session"
-    journal_path = "/tmp/sessions/telethonbot.session-journal"
+    session_path = f"{SESSION_DIR}/telethonbot.session"
+    journal_path = f"{SESSION_DIR}/telethonbot.session-journal"
 
     if os.path.exists(session_path):
         os.remove(session_path)
