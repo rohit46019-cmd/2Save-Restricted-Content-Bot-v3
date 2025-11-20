@@ -20,20 +20,29 @@ journal_path = f"{SESSION_DIR}/telethonbot.session-journal"
 async def load_and_run_plugins():
     await start_client()
     plugin_dir = "plugins"
+
     plugins = [
         f[:-3] for f in os.listdir(plugin_dir)
         if f.endswith(".py") and f != "__init__.py"
     ]
-for plugin in plugins:
-    print("FOUND PLUGIN:", plugin)
+
+    print("FOUND PLUGINS:", plugins)
+
     for plugin in plugins:
+        print("FOUND PLUGIN:", plugin)
         try:
             module = importlib.import_module(f"plugins.{plugin}")
-            if hasattr(module, f"run_{plugin}_plugin"):
+            run_func_name = f"run_{plugin}_plugin"
+
+            if hasattr(module, run_func_name):
                 print(f"Running {plugin} plugin...")
-                await getattr(module, f"run_{plugin}_plugin")()
+                run_func = getattr(module, run_func_name)
+                await run_func()
+            else:
+                print(f"❌ run function missing in {plugin}")
+
         except Exception as e:
-            print(f"Error in {plugin}: {e}")
+            print(f"Error in plugin {plugin}: {e}")
 
 
 async def main():
@@ -57,4 +66,5 @@ if __name__ == "__main__":
             loop.close()
         except Exception:
             pass
+
 
