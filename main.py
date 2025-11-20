@@ -24,7 +24,8 @@ async def load_and_run_plugins():
         f[:-3] for f in os.listdir(plugin_dir)
         if f.endswith(".py") and f != "__init__.py"
     ]
-
+for plugin in plugins:
+    print("FOUND PLUGIN:", plugin)
     for plugin in plugins:
         try:
             module = importlib.import_module(f"plugins.{plugin}")
@@ -56,3 +57,4 @@ if __name__ == "__main__":
             loop.close()
         except Exception:
             pass
+
