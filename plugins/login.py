@@ -301,6 +301,8 @@ Still removing from database..."""
                 os.remove(f"{user_id}_client.session")
         except Exception:
             pass
+async def run_login_plugin():
+    print("Login plugin loaded successfully.")
 
 
 
